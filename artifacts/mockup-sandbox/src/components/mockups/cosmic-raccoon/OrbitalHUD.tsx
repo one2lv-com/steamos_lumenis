@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import "./_group.css";
 
+const h2r = (hex: string, a: number): string => {
+  const h = hex.replace("#", "");
+  const f = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
+  return `rgba(${parseInt(f.slice(0,2),16)},${parseInt(f.slice(2,4),16)},${parseInt(f.slice(4,6),16)},${a})`;
+};
+
 // ═══════════════════════════════════════════════
 //  LUMENIS CORE CONTENT (soul / memory / skill)
 // ═══════════════════════════════════════════════
@@ -302,10 +308,10 @@ function CosmicCanvas({
       };
     });
     s.bodies = [
-      { dist: 88, sz: 3, sp: 0.0048, a: 0, col: "#aaa" },
+      { dist: 88, sz: 3, sp: 0.0048, a: 0, col: "#aaaaaa" },
       { dist: 128, sz: 4.5, sp: 0.0036, a: 1.2, col: "#e8c87a" },
-      { dist: 172, sz: 5, sp: 0.003, a: 2.5, col: "#4af" },
-      { dist: 218, sz: 3.8, sp: 0.0025, a: 4.1, col: "#e74" },
+      { dist: 172, sz: 5, sp: 0.003, a: 2.5, col: "#44aaff" },
+      { dist: 218, sz: 3.8, sp: 0.0025, a: 4.1, col: "#ee7744" },
       { dist: 288, sz: 11, sp: 0.0014, a: 0.8, col: "#c8a46a" },
       { dist: 364, sz: 8.5, sp: 0.001, a: 3.3, col: "#d4b887", rings: true },
       { dist: 435, sz: 6.5, sp: 0.0007, a: 5.0, col: "#7be0e8" },
@@ -406,7 +412,7 @@ function CosmicCanvas({
           ctx.strokeStyle = "rgba(212,184,135,.6)"; ctx.lineWidth = 3.5; ctx.stroke();
         }
         const pg = ctx.createRadialGradient(bx, by, 0, bx, by, b.sz * 2.5);
-        pg.addColorStop(0, b.col + "cc"); pg.addColorStop(1, "rgba(0,0,0,0)");
+        pg.addColorStop(0, h2r(b.col, 0.75)); pg.addColorStop(1, "rgba(0,0,0,0)");
         ctx.beginPath(); ctx.arc(bx, by, b.sz * 2.5, 0, Math.PI * 2); ctx.fillStyle = pg; ctx.fill();
         ctx.beginPath(); ctx.arc(bx, by, b.sz, 0, Math.PI * 2); ctx.fillStyle = b.col; ctx.fill();
         if (b.rings && Math.sin(b.a) >= 0) {
