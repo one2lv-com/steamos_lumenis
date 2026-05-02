@@ -1,0 +1,31 @@
+@keyframes flame-flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.92; }
+  25% { transform: scaleY(1.18) scaleX(0.88); opacity: 1; }
+  50% { transform: scaleY(0.88) scaleX(1.12); opacity: 0.82; }
+  75% { transform: scaleY(1.1) scaleX(0.95); opacity: 0.96; }
+}
+@keyframes panel-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+@keyframes led-blink {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px currentColor); }
+  50% { opacity: 0.35; filter: none; }
+}
+@keyframes voice-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+@keyframes tab-glow {
+  0%, 100% { box-shadow: 0 0 6px currentColor; }
+  50% { box-shadow: 0 0 14px currentColor; }
+}
+@keyframes scroll-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.flame-l { animation: flame-flicker 0.18s ease-in-out infinite; transform-origin: center top; }
+.flame-r { animation: flame-flicker 0.22s ease-in-out infinite 0.06s; transform-origin: center top; }
+.panel-live { animation: panel-pulse 2.1s ease-in-out infinite; }
+.led-active { animation: led-blink 1.4s ease-in-out infinite; }
+.voice-ring { animation: voice-ring 1.2s ease-out infinite; }
