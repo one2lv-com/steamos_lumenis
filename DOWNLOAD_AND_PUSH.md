@@ -124,7 +124,7 @@ Before running, configure these environment variables:
 
 ### lumenis-cosmic-gaming/.env
 ```env
-VITE_STEAM_API_KEY=6D7A2AB5B87BA4FA28E908794B497FFF
+VITE_STEAM_API_KEY=<your_steam_api_key>
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_key
 ```
