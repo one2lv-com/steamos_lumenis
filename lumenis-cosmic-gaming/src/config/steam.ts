@@ -1,8 +1,8 @@
 // Steam API Integration Configuration
-// Steam Web API Key: 6D7A2AB5B87BA4FA28E908794B497FFF
+// Steam Web API Key: configure via VITE_STEAM_API_KEY env var
 
 export const STEAM_CONFIG = {
-  apiKey: import.meta.env.VITE_STEAM_API_KEY || '6D7A2AB5B87BA4FA28E908794B497FFF',
+  apiKey: import.meta.env.VITE_STEAM_API_KEY || '',
   domain: import.meta.env.VITE_STEAM_DOMAIN || 'https://github.com/one2lv-com/Lumenis.io',
 
   // Steam API Endpoints
@@ -18,7 +18,7 @@ export const STEAM_CONFIG = {
 
   // OAuth Configuration
   oauth: {
-    clientId: '6D7A2AB5B87BA4FA28E908794B497FFF',
+    clientId: '',
     redirectUri: `${import.meta.env.VITE_STEAM_DOMAIN || 'https://github.com/one2lv-com/Lumenis.io'}/auth/steam/callback`,
   }
 }
