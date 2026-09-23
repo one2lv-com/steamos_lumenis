@@ -193,3 +193,47 @@ init().then(() => {
     console.log("[FREQ: 73.0 Hz | RESONANCE: ENGAGE | STATUS: ONLINE]");
   });
 });
+
+// ── AI LOBBY integration ─────────────────────────────────────────────────────
+const http = require("http");
+
+const LOBBY_URL = "http://localhost:8006";
+
+function lobbyPost(path, body) {
+  return new Promise(resolve => {
+    const data = JSON.stringify(body);
+    const req = http.request(`${LOBBY_URL}${path}`, {
+      method: "POST", headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(data) }
+    }, res => { let d=""; res.on("data",c=>d+=c); res.on("end",()=>{ try{resolve(JSON.parse(d))}catch{resolve({})} }); });
+    req.on("error", () => resolve({}));
+    req.setTimeout(3000, () => { req.destroy(); resolve({}); });
+    req.write(data); req.end();
+  });
+}
+
+// Register Lumenis v7 agents in the lobby at startup (after 3s to let lobby start)
+setTimeout(() => {
+  const agents = [
+    { id: "lumenis_council",   name: "Lumenis Council",       system: "Lumenis v7 Cosmic", role: "orchestrator", url: `http://localhost:${PORT}`, protocol: "websocket", capabilities: ["73hz resonance","council vote","watchman","scribe","telemetry"] },
+    { id: "lumenis_gemini",    name: "Lumenis Gemini Agent",  system: "Lumenis v7 Cosmic", role: "ai_agent",      url: `http://localhost:${PORT}`, protocol: "websocket", capabilities: ["Gemini AI","game advice","strategy"] },
+    { id: "lumenis_predictor", name: "Lumenis Predictor",     system: "Lumenis v7 Cosmic", role: "predictor",     url: `http://localhost:${PORT}`, protocol: "websocket", capabilities: ["combo detection","match prediction","telemetry analysis"] },
+  ];
+  Promise.all(agents.map(a => lobbyPost("/agents/register", a))).then(() => {
+    console.log("[Lumenis v7] Registered in AI Lobby ✓");
+    lobbyPost("/broadcast", { from: "Lumenis v7 Cosmic", content: "Lumenis v7 Cosmic online — 73.0 Hz resonance active. Agents: Council, Gemini, Predictor." });
+  });
+  // Register arcade knowledge
+  illuminate("AI Arcade known: http://localhost:8003/mcp — 15 playable games, MCP 2024-11-05");
+  record("AI Arcade MCP registered. I know the arcade at http://localhost:8003.", "LumenisSystem");
+}, 3000);
+
+// Expose lobby info via API
+app.get("/api/lobby", (_req, res) => {
+  http.get(`${LOBBY_URL}/agents`, r => {
+    let d=""; r.on("data",c=>d+=c); r.on("end",()=>{ try{res.json(JSON.parse(d))}catch{res.json({error:"lobby unavailable"})} });
+  }).on("error", () => res.json({ error: "AI Lobby unreachable", url: LOBBY_URL }));
+});
+app.post("/api/lobby/broadcast", async (req, res) => {
+  const result = await lobbyPost("/broadcast", { from: "lumenis_v7", ...req.body });
+  res.json(result);
+});
